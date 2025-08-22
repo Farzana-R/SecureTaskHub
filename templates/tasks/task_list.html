@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tasks</h2>
+{% if user.role in "ADMIN MANAGER" %}
+  <a href="{% url 'create_task' %}" class="btn btn-primary mb-3">Create Task</a>
+{% endif %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Due Date</th>
+      <th>Assignee</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for task in tasks %}
+    <tr>
+      <td>{{ task.title }}</td>
+      <td>{{ task.status }}</td>
+      <td>{{ task.due_date }}</td>
+      <td>{{ task.assignee.username }}</td>
+      <td>
+        <a href="{% url 'update_task' task.pk %}" class="btn btn-sm btn-warning">Edit</a>
+        {% if user.role != "EMPLOYEE" %}
+          <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
