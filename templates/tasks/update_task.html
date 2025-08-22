@@ -5,5 +5,11 @@
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-success">Update</button>
+  <a href="{% url 'task_list' %}" class="btn btn-secondary">Cancel</a>
+  {% if user.role != "EMPLOYEE" %}
+    <a href="{% url 'delete_task' task.pk %}" 
+       class="btn btn-danger"
+       onclick="return confirm('Delete this task?');">Delete</a>
+  {% endif %}
 </form>
 {% endblock %}

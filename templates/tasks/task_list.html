@@ -23,9 +23,11 @@
       <td>{{ task.due_date }}</td>
       <td>{{ task.assignee.username }}</td>
       <td>
-        <a href="{% url 'update_task' task.pk %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'update_task' task.pk %}" class="btn btn-sm btn-warning">✏️ Edit</a>
         {% if user.role != "EMPLOYEE" %}
-          <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-danger"
+          onclick="return confirm('Are you sure you want to delete this task?');">
+          🗑 Delete</a>
         {% endif %}
       </td>
     </tr>

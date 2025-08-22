@@ -33,13 +33,13 @@ def task_list(request):
     Managers can see tasks they created,
     Employees can see tasks assigned to them.
     """
-    if request.user.role == 'ADMIN':
+    if request.user.role == 'Admin':
         # Fetch all tasks for admin
         tasks = Task.objects.all()
-    elif request.user.role == 'MANAGER':
+    elif request.user.role == 'Manager':
         # Fetch tasks created by the manager
         tasks = Task.objects.filter(created_by=request.user)
-    elif request.user.role == 'EMPLOYEE':
+    elif request.user.role == 'Employee':
         tasks = Task.objects.filter(assignee=request.user)
     else:
         tasks = Task.objects.none()
@@ -59,9 +59,9 @@ def update_task(request, pk):
     except Task.DoesNotExist:
         return redirect('task_list')
 
-    if request.user.role == 'ADMIN' or \
-       (request.user.role == 'MANAGER' and task.created_by == request.user) or \
-       (request.user.role == 'EMPLOYEE' and task.assignee == request.user):
+    if request.user.role == 'Admin' or \
+       (request.user.role == 'Manager' and task.created_by == request.user) or \
+       (request.user.role == 'Employee' and task.assignee == request.user):
         
         if request.method == 'POST':
             form = TaskForm(request.POST, instance=task)

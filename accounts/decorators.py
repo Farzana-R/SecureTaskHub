@@ -19,7 +19,7 @@ def manager_required(view_func):
     Decorator to ensure that the user is a manager.
     """
     def _wrapped_view(request, *args, **kwargs):
-        if request.user.role not in ['ADMIN', 'MANAGER']:
+        if request.user.role not in ['Admin', 'Manager']:
             raise PermissionDenied(
                 "You do not have permission to access this page.")
         return view_func(request, *args, **kwargs)
