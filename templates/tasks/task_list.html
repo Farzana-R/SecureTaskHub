@@ -12,8 +12,9 @@
       <th>Status</th>
       <th>Due Date</th>
       <th>Assignee</th>
-      <th>Actions</th>
+      <th>Team</th>
       <th>Attachment</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -23,6 +24,12 @@
       <td>{{ task.status }}</td>
       <td>{{ task.due_date }}</td>
       <td>{{ task.assignee.username }}</td>
+      <td>
+        {% if task.team.name %}
+        {{ task.team.name }}
+        {% else %}
+        {%endif%}
+      </td>
       {% if task.attachment %}
       <td>
         <a href="{{ task.attachment.url }}" class="btn btn-sm btn-info">Download</a>

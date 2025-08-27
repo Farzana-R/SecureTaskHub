@@ -37,13 +37,14 @@ class Task(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_tasks')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    assignee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tasks')
+    assignee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assigned_tasks')
     attachment = models.FileField(
         upload_to="task_file/",
         validators=[validate_file_extension, valid_file_size],
         blank=True,
         null=True,
     )
+    team = models.ForeignKey("accounts.Team", on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title} - {self.status}"

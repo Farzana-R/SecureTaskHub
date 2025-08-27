@@ -33,16 +33,18 @@ def task_list(request):
     Managers can see tasks they created,
     Employees can see tasks assigned to them.
     """
+    qs = Task.objects.select_related("created_by", "assignee", "team")
+
     if request.user.role == 'Admin':
         # Fetch all tasks for admin
-        tasks = Task.objects.all()
+        tasks = qs.all()
     elif request.user.role == 'Manager':
         # Fetch tasks created by the manager
-        tasks = Task.objects.filter(created_by=request.user)
+        tasks = qs.filter(created_by=request.user)
     elif request.user.role == 'Employee':
-        tasks = Task.objects.filter(assignee=request.user)
+        tasks = qs.filter(assignee=request.user)
     else:
-        tasks = Task.objects.none()
+        tasks = qs.none()
     return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
 
