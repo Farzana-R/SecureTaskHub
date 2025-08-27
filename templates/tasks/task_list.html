@@ -13,6 +13,7 @@
       <th>Due Date</th>
       <th>Assignee</th>
       <th>Actions</th>
+      <th>Attachment</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,13 @@
       <td>{{ task.status }}</td>
       <td>{{ task.due_date }}</td>
       <td>{{ task.assignee.username }}</td>
+      {% if task.attachment %}
+      <td>
+        <a href="{{ task.attachment.url }}" class="btn btn-sm btn-info">Download</a>
+      </td>
+      {% else %}
+      <td></td>
+      {% endif %}
       <td>
         <a href="{% url 'update_task' task.pk %}" class="btn btn-sm btn-warning">✏️ Edit</a>
         {% if user.role != "EMPLOYEE" %}

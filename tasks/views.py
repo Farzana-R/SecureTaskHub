@@ -15,7 +15,7 @@ def create_task(request):
     View to create a new task, accessible only by managers.
     """
     if request.method == 'POST':
-        form = TaskForm(request.POST)
+        form = TaskForm(request.POST, request.FILES)
         if form.is_valid():
             task = form.save(commit=False)
             task.created_by = request.user

@@ -10,22 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+# load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ird$iz8amm2pqp@qohialz@c*b+k2xafm*srldg4d8xtmajo1b'
+SECRET_KEY =os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -54,6 +61,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True # Redirect all HTTP requests to HTTPS (TODO:set to True in production)
+    CSRF_COOKIE_SECURE = True # Ensure CSRF cookie is only sent over HTTPS (TODO:set to True in production)
+    SESSION_COOKIE_SECURE = True # Ensure session cookie is only sent over HTTPS (TODO:set to True in production)
+    SECURE_HSTS_SECONDS = 31536000 # Enforce HTTPS for one year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 ROOT_URLCONF = 'securetaskhub.urls'
 
@@ -96,6 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8, # Enforce a minimum password length of 8 characters
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -131,3 +149,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "login"
 LOGIN_URL = "login"
+
+# CSRF PROTECTION settings
+CSRF_COOKIE_HTTPONLY = True # Prevent JavaScript access to CSRF cookie
+CSRF_TRUSTED_ORIGINS = ['https://yourdomain.com'] # your domain
+
+# SESSION security settings
+SESSION_COOKIE_HTTPONLY = True # Prevent JavaScript access to session cookie
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# other headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY' # Prevent clickjacking
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

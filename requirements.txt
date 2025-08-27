@@ -1,5 +1,6 @@
 django==4.2.23
 django-crispy-forms==2.4
+python-dotenv
 
 # Django>=4.2,<5.0
 # django-crispy-forms>=2.0
